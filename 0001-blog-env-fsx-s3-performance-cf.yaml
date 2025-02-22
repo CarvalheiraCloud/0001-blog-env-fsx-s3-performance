@@ -248,6 +248,13 @@ Resources:
       ImageId: !Ref LatestAmiId    
       InstanceType: !Ref InstanceTypeParameter
       KeyName: !Ref NewKeyPair
+      NetworkInterfaces: 
+        - AssociatePublicIpAddress: "No"
+          DeviceIndex: "0"
+          GroupSet: 
+            - Ref: "NoIngressSecurityGroup"
+          SubnetId: 
+            Ref: "PrivateSubnet1"      
       UserData: !Base64 
         "Fn::Sub": 
           - |
