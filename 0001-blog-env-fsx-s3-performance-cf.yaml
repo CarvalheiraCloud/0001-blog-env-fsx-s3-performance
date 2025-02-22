@@ -223,7 +223,7 @@ Resources:
       FileSystemTypeVersion: "2.12"
       StorageCapacity: 1200
       SubnetIds: [!Ref PrivateSubnet1]
-      SecurityGroupIds: [!Ref NoIngressSecurityGroup]
+      SecurityGroupIds: [!Ref ProjectSecurityGroup]
       Tags:
         - Key: "Name"
           Value: "s3LinkedFSxLustre"
