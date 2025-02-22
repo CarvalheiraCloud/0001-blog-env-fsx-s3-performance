@@ -16,7 +16,7 @@ Parameters:
 
   LustrePath:
     Type: String
-    Default: "/validation"
+    Default: "/"
 
   EnvironmentName:
     Description: "Project Name"
