@@ -16,7 +16,7 @@ Parameters:
 
   LustrePath:
     Type: String
-    Default: "/"
+    Default: "/validation"
 
   EnvironmentName:
     Description: "Project Name"
@@ -232,7 +232,7 @@ Resources:
         PerUnitStorageThroughput: 200
         DataCompressionType: "LZ4"
         ImportPath: !Join ["", ["s3://", !Ref BucketName]]
-        ExportPath: !Join ["", ["s3://", !Ref LustrePath]]
+        ExportPath: !Join ["", ["s3://", !Ref BucketName]]
         WeeklyMaintenanceStartTime: "6:00:00"
 
 
