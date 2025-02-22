@@ -12,7 +12,7 @@ Parameters:
 
   BucketName: 
     Type: String
-    Default: "bkt-carvalheira-cloud"
+    Default: "bkt-carvalheira-cloud-0e9f5cd7abfb"
 
   LustrePath:
     Type: String
@@ -204,15 +204,15 @@ Resources:
         - IpProtocol: "-1"
           CidrIp: 0.0.0.0/0
      
-  S3Bucket:
-    Type: 'AWS::S3::Bucket'
-    DeletionPolicy: Retain
-    Properties:
-      BucketName: !Join ['-', [!Ref BucketName, !Select [4, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]]]   
-      BucketEncryption:
-        ServerSideEncryptionConfiguration:
-          - ServerSideEncryptionByDefault:
-              SSEAlgorithm: AES256
+  # S3Bucket:
+  #   Type: 'AWS::S3::Bucket'
+  #   DeletionPolicy: Retain
+  #   Properties:
+  #     BucketName: !Join ['-', [!Ref BucketName, !Select [4, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]]]   
+  #     BucketEncryption:
+  #       ServerSideEncryptionConfiguration:
+  #         - ServerSideEncryptionByDefault:
+  #             SSEAlgorithm: AES256
 
   S3LinkedLustreFileSystem:
     Type: AWS::FSx::FileSystem
