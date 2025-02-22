@@ -229,9 +229,9 @@ Resources:
         CopyTagsToBackups: true
         DeploymentType: "PERSISTENT_1"
         PerUnitStorageThroughput: 200
-        DataCompressionType: "LZ4"
-        ImportPath: !Join ["", ["s3://", !Ref BucketName]]
-        ExportPath: !Join ["", ["s3://", !Ref BucketName]]
+        #DataCompressionType: "LZ4"
+        ImportPath: !Join ["", ["s3://", !Ref BucketName, !Ref LustrePath]]
+        ExportPath: !Join ["", ["s3://", !Ref BucketName, !Ref LustrePath]]
         WeeklyMaintenanceStartTime: "6:00:00"
 
 
