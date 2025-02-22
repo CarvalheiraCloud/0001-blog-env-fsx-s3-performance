@@ -201,9 +201,7 @@ Resources:
           ToPort: 988
           CidrIp: !Ref VpcCIDR
       SecurityGroupEgress:
-        - IpProtocol: tcp
-          FromPort: -1
-          ToPort: -1
+        - IpProtocol: "-1"
           CidrIp: 0.0.0.0/0
      
   S3Bucket:
