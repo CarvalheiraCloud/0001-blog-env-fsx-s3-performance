@@ -21,7 +21,7 @@ Parameters:
   EnvironmentName:
     Description: "Project Name"
     Type: String
-    Default: "Project-Carvalheira.Cloud"
+    Default: "Project-Carvalheira-Cloud"
 
   VpcCIDR:
     Description: "CIDR for the VPC"
@@ -242,26 +242,26 @@ Resources:
       KeyName: ProjetoKeyPair
 
 
-  Instance:
-    Type: AWS::EC2::Instance
-    Properties: 
-      ImageId: !Ref LatestAmiId    
-      InstanceType: !Ref InstanceTypeParameter
-      KeyName: !Ref NewKeyPair
-      NetworkInterfaces: 
-        - AssociatePublicIpAddress: "No"
-          DeviceIndex: "0"
-          GroupSet: 
-            - Ref: "NoIngressSecurityGroup"
-          SubnetId: 
-            Ref: "PrivateSubnet1"      
-      UserData: !Base64 
-        "Fn::Sub": 
-          - |
-            #!/bin/bash
-            sudo dnf install -y lustre-client
-            sudo dnf -y update kernel
-            sudo mkdir -p /mnt/fsx
-            sudo mount -t lustre -o relatime,flock ${dnsname}@tcp:/${lustremountname} /mnt/fsx
-          - dnsname: !GetAtt S3LinkedLustreFileSystem.DNSName
-            lustremountname: !GetAtt S3LinkedLustreFileSystem.LustreMountName
+  # Instance:
+  #   Type: AWS::EC2::Instance
+  #   Properties: 
+  #     ImageId: !Ref LatestAmiId    
+  #     InstanceType: !Ref InstanceTypeParameter
+  #     KeyName: !Ref NewKeyPair
+  #     NetworkInterfaces: 
+  #       - AssociatePublicIpAddress: false
+  #         DeviceIndex: "0"
+  #         GroupSet: 
+  #           - Ref: "NoIngressSecurityGroup"
+  #         SubnetId: 
+  #           Ref: "PrivateSubnet1"      
+  #     UserData: !Base64 
+  #       "Fn::Sub": 
+  #         - |
+  #           #!/bin/bash
+  #           sudo dnf install -y lustre-client
+  #           sudo dnf -y update kernel
+  #           sudo mkdir -p /mnt/fsx
+  #           sudo mount -t lustre -o relatime,flock ${dnsname}@tcp:/${lustremountname} /mnt/fsx
+  #         - dnsname: !GetAtt S3LinkedLustreFileSystem.DNSName
+  #           lustremountname: !GetAtt S3LinkedLustreFileSystem.LustreMountName
