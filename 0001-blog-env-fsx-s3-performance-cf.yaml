@@ -202,16 +202,7 @@ Resources:
       SecurityGroupEgress:
         - IpProtocol: "-1"
           CidrIp: 0.0.0.0/0
-     
-  # S3Bucket:
-  #   Type: 'AWS::S3::Bucket'
-  #   DeletionPolicy: Retain
-  #   Properties:
-  #     BucketName: !Join ['-', [!Ref BucketName, !Select [4, !Split ['-', !Select [2, !Split ['/', !Ref AWS::StackId]]]]]]   
-  #     BucketEncryption:
-  #       ServerSideEncryptionConfiguration:
-  #         - ServerSideEncryptionByDefault:
-  #             SSEAlgorithm: AES256
+         
 
   S3LinkedLustreFileSystem:
     Type: AWS::FSx::FileSystem
@@ -225,16 +216,31 @@ Resources:
         - Key: "Name"
           Value: "s3LinkedFSxLustre"
       LustreConfiguration:
-        AutoImportPolicy: "NEW"
         CopyTagsToBackups: true
-        DeploymentType: "PERSISTENT_1"
-        PerUnitStorageThroughput: 200
-        #DataCompressionType: "LZ4"
-        ImportPath: !Join ["", ["s3://", !Ref BucketName, !Ref LustrePath]]
-        ExportPath: !Join ["", ["s3://", !Ref BucketName, !Ref LustrePath]]
+        DeploymentType: "PERSISTENT_2"
+        PerUnitStorageThroughput: 125
+        DataCompressionType: "LZ4"
         WeeklyMaintenanceStartTime: "6:00:00"
 
 
+  S3LinkedLustreFileSystemDra:
+    Type: 'AWS::FSx::DataRepositoryAssociation'
+    Properties:
+      FileSystemId: !Ref S3LinkedLustreFileSystem
+      FileSystemPath: !Ref LustrePath
+      DataRepositoryPath: !Join ["", ["s3://", !Ref BucketName], !Ref LustrePath]
+      BatchImportMetaDataOnCreate: true
+      S3:
+        AutoImportPolicy:
+          Events:
+            - NEW
+            - CHANGED
+            - DELETED
+        AutoExportPolicy:
+          Events:
+            - NEW
+            - CHANGED
+            - DELETED
   NewKeyPair:
     Type: 'AWS::EC2::KeyPair'
     Properties:
