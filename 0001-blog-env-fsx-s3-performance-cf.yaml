@@ -11,7 +11,7 @@ Parameters:
 
   BucketName: 
     Type: String
-    Default: "bkt-carvalheira-cloud-0e9f5cd7abfb"
+    Default: "bkt-carvalheira-cloud"
 
   LustrePath:
     Type: String
