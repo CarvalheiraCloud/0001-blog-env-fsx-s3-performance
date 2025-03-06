@@ -219,7 +219,7 @@ Resources:
         CopyTagsToBackups: true
         DeploymentType: "PERSISTENT_2"
         PerUnitStorageThroughput: 125
-        DataCompressionType: "LZ4"
+        DataCompressionType: "LZ4" 
         WeeklyMaintenanceStartTime: "6:00:00"
 
 
@@ -228,7 +228,7 @@ Resources:
     Properties:
       FileSystemId: !Ref S3LinkedLustreFileSystem
       FileSystemPath: !Ref LustrePath
-      DataRepositoryPath: !Join ["", ["s3://", !Ref BucketName], !Ref LustrePath]
+      DataRepositoryPath: !Join ["", ["s3://", !Ref BucketName, !Ref LustrePath]]
       BatchImportMetaDataOnCreate: true
       S3:
         AutoImportPolicy:
@@ -247,12 +247,64 @@ Resources:
       KeyName: ProjetoKeyPair
 
 
+  S3GatewayEndpoint:
+    Type: 'AWS::EC2::VPCEndpoint'
+    Properties:
+      VpcEndpointType: 'Gateway'
+      VpcId: !Ref VPC
+      ServiceName: !Sub 'com.amazonaws.${AWS::Region}.s3'
+      PolicyDocument:
+        Version: 2012-10-17
+        Statement:
+          - Effect: Allow
+            Principal: '*'
+            Action:
+              - '*'
+            Resource:
+              - '*'
+      RouteTableIds:
+        - !Ref PrivateRouteTable1
+
+
+  EC2RoleProject:
+    Type: 'AWS::IAM::Role'
+    Properties:
+      AssumeRolePolicyDocument:
+        Version: "2012-10-17"
+        Statement:
+          - Effect: Allow
+            Principal:
+              Service:
+                - ec2.amazonaws.com
+            Action:
+              - 'sts:AssumeRole'
+      Path: /
+      Policies:
+        - PolicyName: root
+          PolicyDocument:
+            Version: "2012-10-17"
+            Statement:
+              - Effect: Allow
+                Action:
+                - 's3:*'
+                - 'ec2:*'
+                Resource: "*"
+  
+  EC2RoleProjectInstanceProfile:
+    Type: 'AWS::IAM::InstanceProfile'
+    Properties:
+      Path: /
+      Roles:
+        - !Ref EC2RoleProject
+
+
   Instance:
     Type: AWS::EC2::Instance
     Properties: 
       ImageId: !Ref AmazonLinuxAmiId    
       InstanceType: !Ref InstanceTypeParameter
       KeyName: !Ref NewKeyPair
+      IamInstanceProfile: !Ref EC2RoleProjectInstanceProfile
       NetworkInterfaces: 
         - AssociatePublicIpAddress: false
           DeviceIndex: "0"
