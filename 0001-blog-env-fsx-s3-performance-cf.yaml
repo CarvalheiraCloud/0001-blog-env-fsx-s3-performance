@@ -305,6 +305,11 @@ Resources:
       InstanceType: !Ref InstanceTypeParameter
       KeyName: !Ref NewKeyPair
       IamInstanceProfile: !Ref EC2RoleProjectInstanceProfile
+      Tags: 
+        - Key: "Name"
+          Value: "Instance-test-fsx-s3"
+        - Key: "Project"
+          Value: "Carvalheira.Cloud"      
       NetworkInterfaces: 
         - AssociatePublicIpAddress: false
           DeviceIndex: "0"
@@ -320,5 +325,28 @@ Resources:
             sudo dnf -y update kernel
             sudo mkdir -p /mnt/fsx
             sudo mount -t lustre -o relatime,flock ${dnsname}@tcp:/${lustremountname} /mnt/fsx
+            cd ~
+            dd if=/dev/zero of="big_test_file.txt" bs=1M count=4096
+            dd if=/dev/zero of="small_test_file-01.txt" bs=1M count=100
+            dd if=/dev/zero of="small_test_file-02.txt" bs=1M count=100
+            dd if=/dev/zero of="small_test_file-03.txt" bs=1M count=100
+            dd if=/dev/zero of="small_test_file-04.txt" bs=1M count=100
+            dd if=/dev/zero of="small_test_file-05.txt" bs=1M count=100
+            dd if=/dev/zero of="small_test_file-06.txt" bs=1M count=100
+            dd if=/dev/zero of="small_test_file-07.txt" bs=1M count=100
+            dd if=/dev/zero of="small_test_file-08.txt" bs=1M count=100
+            dd if=/dev/zero of="small_test_file-09.txt" bs=1M count=100
+            dd if=/dev/zero of="small_test_file-10.txt" bs=1M count=100
+            dd if=/dev/zero of="small_test_file-11.txt" bs=1M count=100
+            dd if=/dev/zero of="small_test_file-12.txt" bs=1M count=100
+            dd if=/dev/zero of="small_test_file-13.txt" bs=1M count=100
+            dd if=/dev/zero of="small_test_file-14.txt" bs=1M count=100
+            dd if=/dev/zero of="small_test_file-15.txt" bs=1M count=100
+            dd if=/dev/zero of="small_test_file-16.txt" bs=1M count=100
+            dd if=/dev/zero of="small_test_file-17.txt" bs=1M count=100
+            dd if=/dev/zero of="small_test_file-18.txt" bs=1M count=100
+            dd if=/dev/zero of="small_test_file-19.txt" bs=1M count=100
+            dd if=/dev/zero of="small_test_file-20.txt" bs=1M count=100
           - dnsname: !GetAtt S3LinkedLustreFileSystem.DNSName
             lustremountname: !GetAtt S3LinkedLustreFileSystem.LustreMountName
+
